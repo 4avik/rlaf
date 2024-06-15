@@ -19,6 +19,15 @@
             </div>
 
             @auth
+                <!-- Admin Actions -->
+                @if(auth()->user()->isAdmin())
+                    <div class="hidden sm:flex sm:items-center sm:ml-6">
+                        <x-nav-link :href="route('posts.create')" :active="request()->routeIs('posts.create')">
+                            {{ __('Create New Post') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+
                 <!-- Settings Dropdown -->
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-dropdown align="right" width="48">
@@ -49,7 +58,7 @@
 
                                 <x-dropdown-link :href="route('logout')"
                                                  onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                             this.closest('form').submit();">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>
@@ -83,6 +92,16 @@
         </div>
 
         @auth
+            <!-- Admin Actions -->
+            @if(auth()->user()->isAdmin())
+                <div class="pt-4 pb-1 border-t border-gray-200">
+                    <x-responsive-nav-link :href="route('posts.create')"
+                                            :active="request()->routeIs('posts.create')">
+                        {{ __('Create New Post') }}
+                    </x-responsive-nav-link>
+                </div>
+            @endif
+
             <!-- Responsive Settings Options -->
             <div class="pt-4 pb-1 border-t border-gray-200">
                 <div class="px-4">

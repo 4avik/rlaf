@@ -30,7 +30,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+// Use the admin middleware for routes that should only be accessible by admins
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('posts', PostController::class)->except(['index', 'show']);
+});
 
-Route::resource('posts', PostController::class);
+Route::resource('posts', PostController::class)->only(['index', 'show']);
 Route::middleware('auth')->resource('posts.comments', CommentController::class);
+
+require __DIR__.'/auth.php';

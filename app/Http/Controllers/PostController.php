@@ -22,7 +22,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -30,9 +30,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+   
+$request->user()->posts()->create($validatedData);
+
+        return redirect()->route('posts.index')->with('success', 'Post created successfully!');
     }
 
+    
     /**
      * Display the specified resource.
      */
@@ -49,7 +57,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('posts.edit_post', compact('post'));
     }
 
     /**
@@ -57,14 +65,26 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+
+         // Create new post 
+         $post = auth()->user()->posts()->create($validatedData);
+
+        // Did you pass?
+        return redirect()->route('posts.index')->with('success', 'Post created successfully');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('posts.index')->with('success', 'Post deleted successfully.');
     }
 }
